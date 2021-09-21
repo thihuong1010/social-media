@@ -1,0 +1,30 @@
+#homepage {
+    text-align: center;
+}
+
+.btn-facebook {
+    background-color: rgb(10, 159, 245);
+    color: aliceblue;
+}
+.btn-facebook:link, 
+.btn-facebook:visited {
+    text-decoration: none;
+}
+
+.btn-gplus {
+    background-color: rgb(245, 63, 31);
+    color: aliceblue;
+}
+.btn-gplus:link, 
+.btn-gplus:visited {
+    text-decoration: none;
+}
+
+.btn-instagram {
+    background-color: rgb(213, 125, 248);
+    color: aliceblue;
+}
+.btn-instagram:link, 
+.btn-instagram:visited {
+    text-decoration: none;
+}
