@@ -22,11 +22,11 @@ passport.use(new GoogleStrategy({
   (accessToken, refreshToken, profile, done) => {
     console.log(profile);
     User.findOne({
-        google: profile.id
+        google: profile.id 
     }).then((user) => {
         if(user) {
-            done(null,user);
-        } else {
+            done(null, user);
+        }else{
             const newUser = {
                 google: profile.id,
                 fullname: profile.displayName,
@@ -35,10 +35,10 @@ passport.use(new GoogleStrategy({
                 email: profile.emails[0].value,
                 image: profile.photos[0].value
             }
-            // save new user to database
+            // save new user into db
             new User(newUser).save()
             .then((user) => {
-                done(null,user);
+                done(null, user);
             })
         }
     })
