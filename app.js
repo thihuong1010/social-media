@@ -89,6 +89,11 @@ app.get('/profile', (req, res) => {
         });
     })
 });
+// user log out route
+app.get('/logout', (req, res) => {
+    req.logOut();
+    res.redirect('/');
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
