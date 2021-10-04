@@ -3,7 +3,7 @@
 }
 
 .btn-facebook {
-    background-color: rgb(10, 159, 245);
+    background-color: rgb(14, 140, 212);
     color: aliceblue;
 }
 .btn-facebook:link, 
@@ -27,4 +27,17 @@
 .btn-instagram:link, 
 .btn-instagram:visited {
     text-decoration: none;
+}
+
+#welcome {
+    color: rgb(248, 202, 133);
+}
+
+h1 {
+    text-align: center;
+}
+
+#main {
+    margin-top: 63px;
+    margin-bottom: 50px;
 }
