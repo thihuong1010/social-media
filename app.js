@@ -18,8 +18,10 @@ require('./passport/google-passport'); // link gg-passport.js
 require('./passport/facebook-passport');// link facebook-passport
 // link helpers
 const {
-    ensureAuthentication
+    ensureAuthentication,
+    ensureGuest
 } = require('./helpers/auth');
+const user = require('./models/user');
 
 const app = express(); // initialize app
 
@@ -66,7 +68,7 @@ mongoose.connect(keys.MongoURI, {
 const port =process.env.PORT || 3000; 
 
 // visit home page, message sent, send() method to send somethings on the screen
-app.get('/', (req, res) => {
+app.get('/', ensureGuest, (req, res) => {
     res.render('home');
 });
 
@@ -88,12 +90,25 @@ app.get('/auth/google/callback',
 });
 // facebook authenticate requests
 app.get('/auth/facebook',
-    passport.authenticate('facebook', { scope : 'email' }));
+    passport.authenticate('facebook', { scope : ['email'] }));
 app.get('/auth/facebook/callback',
     passport.authenticate('facebook', {failureRedirect: '/'}),
 (req, res) => {
     // successful authentication, redirect home
     res.redirect('/profile');
+});
+
+//handle email post route
+app.post('/addEmail', (req, res) => {
+    const email = req.body.email;
+    User.findById({_id: req.user._id})
+    .then((user) => {
+        user.email = email;
+        user.save()
+        .then(() => {
+            res.redirect('/profile');
+        });
+    });
 });
 
 // handle profile route
