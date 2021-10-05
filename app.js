@@ -88,7 +88,7 @@ app.get('/auth/google/callback',
 });
 // facebook authenticate requests
 app.get('/auth/facebook',
-    passport.authenticate('facebook', { scope : ['email'] }));
+    passport.authenticate('facebook', { scope : 'email' }));
 app.get('/auth/facebook/callback',
     passport.authenticate('facebook', {failureRedirect: '/'}),
 (req, res) => {
