@@ -15,7 +15,11 @@ const keys = require('./config/keys'); // connect to MongoURI from external file
 const User = require('./models/user'); // user collection
 
 require('./passport/google-passport'); // link gg-passport.js
-
+require('./passport/facebook-passport');// link facebook-passport
+// link helpers
+const {
+    ensureAuthentication
+} = require('./helpers/auth');
 
 const app = express(); // initialize app
 
@@ -82,8 +86,18 @@ app.get('/auth/google/callback',
     // Successful authentication, redirect home.
     res.redirect('/profile');
 });
+// facebook authenticate requests
+app.get('/auth/facebook',
+    passport.authenticate('facebook', { scope : ['email'] }));
+app.get('/auth/facebook/callback',
+    passport.authenticate('facebook', {failureRedirect: '/'}),
+(req, res) => {
+    // successful authentication, redirect home
+    res.redirect('/profile');
+});
 
-app.get('/profile', (req, res) => {
+// handle profile route
+app.get('/profile', ensureAuthentication, (req, res) => {
     User.findById({_id: req.user._id})
     .then((user) => {
         res.render('profile', { 
