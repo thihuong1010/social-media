@@ -145,6 +145,14 @@ app.get('/profile', ensureAuthentication, (req, res) => {
         });
     })
 });
+// handle users in collection route
+app.get('/users', (req, res) => {
+    User.find({}).then((users) => {
+        res.render('users', {
+            users:users
+        });
+    });
+});
 
 // user log out route
 app.get('/logout', (req, res) => {
