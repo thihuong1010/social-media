@@ -16,7 +16,7 @@ const passport = require('passport');
  passport.use(new FacebookStrategy({
      clientID: keys.FacebookClientID,
      clientSecret: keys.FacebookClientSecret,
-     callbackURL: "https://calm-springs-04887.herokuapp.com/auth/facebook/callback",
+     callbackURL: "/auth/facebook/callback",
      profileFields: ['id', 'displayName', 'name', 'photos', 'email'],
      proxy: true
      },
