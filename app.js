@@ -22,6 +22,7 @@ const {
     ensureGuest
 } = require('./helpers/auth');
 const user = require('./models/user');
+const { use } = require('passport');
 
 const app = express(); // initialize app
 
@@ -104,6 +105,30 @@ app.post('/addEmail', (req, res) => {
     User.findById({_id: req.user._id})
     .then((user) => {
         user.email = email;
+        user.save()
+        .then(() => {
+            res.redirect('/profile');
+        });
+    });
+});
+// handle phone post route
+app.post('/addphone', (req, res) => {
+    const phone = req.body.phone;
+    User.findById({_id: req.user._id})
+    .then((user) => {
+        user.phone = phone;
+        user.save()
+        .then(() => {
+            res.redirect('/profile');
+        });
+    });
+});
+// handle location post route
+app.post('/addLocation', (req, res) => {
+    const location = req.body.location;
+    User.findById({_id: req.user._id})
+    .then((user) => {
+        user.location = location;
         user.save()
         .then(() => {
             res.redirect('/profile');
