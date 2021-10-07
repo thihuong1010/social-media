@@ -61,5 +61,9 @@ h1 {
 }
 
 .red {
-    color:rgb(6, 99, 153);
+    color: red;
+}
+
+.blue {
+    color: rgb(0, 89, 255);
 }

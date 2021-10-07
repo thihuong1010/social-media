@@ -145,13 +145,12 @@ app.get('/addPost', (req, res) => {
 });
 // handle post route for save post
 app.post('/savePost', (req, res) => {
-    let allowComments;
+    var allowComments;
     if(req.body.allowComments) {
         allowComments = true;
     } else {
         allowComments = false;
     }
-
     const newPost = {
         title: req.body.title,
         body: req.body.body,
@@ -162,7 +161,7 @@ app.post('/savePost', (req, res) => {
     new Post(newPost).save()
     .then(() => {
         res.redirect('/posts')
-    })
+    });
 });
 // handle edit post route
 app.get('/editPost/:id', (req, res) => {
@@ -173,11 +172,26 @@ app.get('/editPost/:id', (req, res) => {
         });
     });
 });
+//handle save comment
+app.post('/addComment/:id', (req, res) => {
+    Post.findOne({_id: req.params.id})
+    .then((post) => {
+        const newComment = {
+            commentBody: req.body.commentBody,
+            commentUser: req.user._id
+        }
+        post.comments.push(newComment)
+        post.save()
+        .then(() => {
+            res.redirect('/posts');
+        });
+    });
+});
 // put route after edit post to save
 app.put('/editingPost/:id', (req, res) => {
     Post.findOne({_id: req.params.id})
     .then((post) => {
-        let allowComments;
+        var allowComments;
         if(req.body.allowComments) {
             allowComments = true;
         } else {
@@ -193,11 +207,18 @@ app.put('/editingPost/:id', (req, res) => {
         });
     });
 });
-
+// handle delete route
+app.delete('/:id', (req, res) => {
+    Post.remove({_id: req.params.id})
+    .then(() => {
+        res.redirect('profile');
+    });
+});
 // handle posts route - posts after people write a status
 app.get('/posts', ensureAuthentication, (req, res) => {
     Post.find({status: 'public'}) 
     .populate('user')
+    .populate('comments.commentUser')
     .sort({date: 'desc'})
     .then((posts) => {
         res.render('publicPosts', {
