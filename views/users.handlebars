@@ -1,12 +1,14 @@
-<div class="container-fluid">
+<div class="container">
     <div class="row">
         {{#each users}} 
         <div class="col-sm-4">
             <div class="card" style="width: 18rem;">
                 <img class="card-img-top" src="{{image}}" alt="Card image cap">
                 <div class="card-body">
-                    <h5 class="card-title">{{fullname}}</h5>
-                    <p id="address" class="card-title">{{location}}</p>
+                    <a id="username" href="/user/{{id}}">
+                        <h5 class="card-title">{{fullname}}</h5>
+                    </a>
+                    <p id="address" class="card-title"><i class="fa fa-map-marker"></i> {{location}}</p>
                 </div>
             </div>
         </div>

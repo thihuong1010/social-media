@@ -12,7 +12,9 @@ const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-ac
 const cookieParser = require('cookie-parser');
 
 const keys = require('./config/keys'); // connect to MongoURI from external file
+
 const User = require('./models/user'); // user collection
+const Post = require('./models/post'); // post collection
 
 require('./passport/google-passport'); // link gg-passport.js
 require('./passport/facebook-passport');// link facebook-passport
@@ -23,6 +25,7 @@ const {
 } = require('./helpers/auth');
 const user = require('./models/user');
 const { use } = require('passport');
+const post = require('./models/post');
 
 const app = express(); // initialize app
 
@@ -135,7 +138,42 @@ app.post('/addLocation', (req, res) => {
         });
     });
 });
+// handle get route for posts
+app.get('/addPost', (req, res) => {
+    res.render('addPost');
+});
+// handle post route for save post
+app.post('/savePost', (req, res) => {
+    let allowComments;
+    if(req.body.allowComments) {
+        allowComments = true;
+    } else {
+        allowComments = false;
+    }
 
+    const newPost = {
+        title: req.body.title,
+        body: req.body.body,
+        status: req.body.status,
+        allowComments: allowComments,
+        user: req.user._id
+    }
+    new Post(newPost).save()
+    .then(() => {
+        res.redirect('/posts')
+    })
+});
+// handle posts route - posts after people write a status
+app.get('/posts', ensureAuthentication, (req, res) => {
+    Post.find({status: 'public'}) 
+    .populate('user')
+    .sort({date: 'desc'})
+    .then((posts) => {
+        res.render('publicPosts', {
+            posts:posts
+        });
+    });
+});
 // handle profile route
 app.get('/profile', ensureAuthentication, (req, res) => {
     User.findById({_id: req.user._id})
@@ -146,10 +184,19 @@ app.get('/profile', ensureAuthentication, (req, res) => {
     })
 });
 // handle users in collection route
-app.get('/users', (req, res) => {
+app.get('/users', ensureAuthentication, (req, res) => {
     User.find({}).then((users) => {
         res.render('users', {
             users:users
+        });
+    });
+});
+// handle one user profile
+app.get('/user/:id', (req, res) => {
+    User.findById({_id: req.params.id})
+    .then((user) => {
+        res.render('user', {
+            user:user
         });
     });
 });

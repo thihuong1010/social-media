@@ -49,3 +49,7 @@ h1 {
 #address {
     color: rgb(182, 65, 11);
 }
+
+#username {
+    text-decoration: none;
+}
