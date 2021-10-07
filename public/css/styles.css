@@ -47,9 +47,19 @@ h1 {
 }
 
 #address {
-    color: rgb(182, 65, 11);
+    color:rgb(6, 99, 153);
 }
 
 #username {
     text-decoration: none;
+    color: black;
+}
+
+.post-user-pic {
+     width: 100px;
+     height: auto;
+}
+
+.red {
+    color:rgb(6, 99, 153);
 }

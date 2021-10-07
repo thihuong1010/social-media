@@ -8,8 +8,8 @@ const session = require("express-session");
 const bodyParser = require('body-parser');
 const Handlebars = require('handlebars');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
-
 const cookieParser = require('cookie-parser');
+const methodOverride = require('method-override');
 
 const keys = require('./config/keys'); // connect to MongoURI from external file
 
@@ -40,6 +40,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+app.use(methodOverride('_method'));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -163,6 +164,36 @@ app.post('/savePost', (req, res) => {
         res.redirect('/posts')
     })
 });
+// handle edit post route
+app.get('/editPost/:id', (req, res) => {
+    Post.findOne({_id: req.params.id})
+    .then((post) => {
+        res.render('editingPost', {
+            post:post
+        });
+    });
+});
+// put route after edit post to save
+app.put('/editingPost/:id', (req, res) => {
+    Post.findOne({_id: req.params.id})
+    .then((post) => {
+        let allowComments;
+        if(req.body.allowComments) {
+            allowComments = true;
+        } else {
+            allowComments = false;
+        }
+        post.title = req.body.title;
+        post.body = req.body.body;
+        post.status = req.body.status;
+        post.allowComments = allowComments;
+        post.save()
+        .then(() => {
+            res.redirect('/profile');
+        });
+    });
+});
+
 // handle posts route - posts after people write a status
 app.get('/posts', ensureAuthentication, (req, res) => {
     Post.find({status: 'public'}) 
@@ -176,12 +207,14 @@ app.get('/posts', ensureAuthentication, (req, res) => {
 });
 // handle profile route
 app.get('/profile', ensureAuthentication, (req, res) => {
-    User.findById({_id: req.user._id})
-    .then((user) => {
-        res.render('profile', { 
-            user:user
+    Post.find({user: req.user._id})
+    .populate('user')
+    .sort({date: 'desc'}) // set last post shown first
+    .then((posts) => {
+        res.render('profile', {
+            posts:posts
         });
-    })
+    });
 });
 // handle users in collection route
 app.get('/users', ensureAuthentication, (req, res) => {
