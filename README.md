@@ -1,15 +1,31 @@
-# social-media
-Building  social media, it works like a blog. You can post your story and people can comment on it. 
+# Social media
 
-- front
-Handlebars for HTML
-Style: Bootstrap, CSS
-JavaScript
+## Description
 
-- back- end
-Express
+A social media works likes the blog. You can post your status, see status from everybody.
 
-- db
-Mongodb
+### Features
 
-- Live link: https://calm-springs-04887.herokuapp.com
+- Log in with Google Auth
+- Post and delete your status
+- Make your status private or public
+- Comment on people post
+- Log out 
+
+### Challenges faced and features that is hoped to implement in the future
+
+- Sign in with facebook account
+- Post your photo
+- Share post
+
+## Tech stack
+
+- Build with template engine: Handlebars
+- HTML, CSS, JavaScript
+- Styles by Boostrap
+- Epress.js
+- Mongo DB
+
+## Live demo
+
+Link: https://tranquil-ravine-02325.herokuapp.com
